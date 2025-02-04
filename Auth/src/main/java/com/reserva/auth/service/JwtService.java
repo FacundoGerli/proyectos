@@ -12,18 +12,21 @@ import java.util.Date;
 import java.util.Map;
 @Service
 public class JwtService {
-    @Value("jwt.secret")
+    @Value("${jwt.secret-key}")
     private String secret_key;
-    @Value("jwt.expiration")
-    private String jwtExpiration;
-    @Value("jwt.refresh-token.expiration")
-    private String refreshExpiration;
+    @Value("${jwt.expiration}")
+    private Long jwtExpiration;
+    @Value("${jwt.refresh-token.expiration}")
+    private Long refreshExpiration;
+    public JwtService(){
+        System.out.println(secret_key);
+    }
 
     public String generateToken(final User user){
-        return buildToken(user, Long.valueOf(jwtExpiration));
+        return buildToken(user, jwtExpiration);
     }
     public String generateRefreshToken(final User user){
-        return buildToken(user, Long.valueOf(refreshExpiration));
+        return buildToken(user, (refreshExpiration));
     }
     private String buildToken(final User user, final Long expiration){
         return Jwts.builder()

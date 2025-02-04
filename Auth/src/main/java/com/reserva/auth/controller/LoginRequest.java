@@ -1,7 +1,7 @@
 package com.reserva.auth.controller;
 
 public record LoginRequest(
-        String username,
+        String mail,
         String password
 ) {
 }
