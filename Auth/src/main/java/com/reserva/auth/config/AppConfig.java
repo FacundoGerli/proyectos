@@ -5,8 +5,10 @@ import com.reserva.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,12 +28,12 @@ public class AppConfig {
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> {
-            final User user =
-                    repository.findByEmail(username);
+            final User user = repository.findByEmail(username);
             if  (user == null) throw new UsernameNotFoundException("User not found");
             return org.springframework.security.core.userdetails.User.builder()
                     .username(user.getEmail())
-                    .password(user.getPassword()) // La contraseña esta encriptada por lo que hay que buscar una forma en la que
+                    .password(user.getPassword())
+                    .roles("User")// La contraseña esta encriptada por lo que hay que buscar una forma en la que
                     .build();                     //podamos mostrarle a spring como
         };
     }
@@ -42,6 +44,11 @@ public class AppConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)throws Exception{
+        return config.getAuthenticationManager();
+    }
+
 }
 
 

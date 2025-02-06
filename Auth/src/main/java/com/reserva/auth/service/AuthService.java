@@ -23,7 +23,7 @@ public class AuthService implements IAuthService{
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtService jwtService;
-    private final AuthenticationProvider authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public TokenResponse register(RegisterRequest request) {
